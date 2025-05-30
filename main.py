@@ -1,17 +1,17 @@
-import sys
+from flask import Flask, render_template, request
 
-def main():
-    print("Welcome to CarGPT! How can I assist you today?")
+app = Flask(__name__)
 
-    while True:
-        user_input = input("> ")
+@app.route('/')
+def index():
+    return render_template('index.html')
 
-        if user_input.lower() == 'exit':
-            print("Goodbye!")
-            sys.exit()
+@app.route('/chat', methods=['POST'])
+def chat():
+    user_input = request.form['user_input']
+    # Process user_input here later
+    bot_response = f"You said: {user_input}" # Placeholder
+    return bot_response
 
-        # Process user_input here later
-        print(f"You said: {user_input}") # Placeholder
-
-if __name__ == "__main__":
-    main() 
+if __name__ == '__main__':
+    app.run(debug=True) 

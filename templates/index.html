@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Habari UI</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: sans-serif;
+            background-color: #1a1a2e; /* Dark background */
+            color: #ffffff; /* White text */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* Full viewport height */
+        }
+
+        .main-content-area {
+            display: flex;
+            flex-direction: column;
+            width: 100%; /* Or a specific max-width */
+            height: 100vh; /* Full viewport height */
+            box-sizing: border-box;
+            background-color: #252537; /* Slightly lighter dark for content area */
+        }
+
+        .app-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background-color: #1a1a2e; /* Same dark as body for header */
+            border-bottom: 1px solid #333; /* Separator line */
+        }
+
+        .logo {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #ffffff; /* White color for logo */
+        }
+
+        .header-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .count {
+            font-size: 0.9em;
+            color: #aaaaaa; /* Grey color for count */
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            background-color: #4caf50; /* Example status color (green) */
+            border-radius: 50%;
+        }
+
+        .central-display {
+            flex-grow: 1; /* Takes up available space */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .message {
+            font-size: 1.2em;
+            color: #cccccc; /* Lighter grey for message */
+        }
+
+        .input-footer {
+            padding: 15px 20px;
+            background-color: #1a1a2e; /* Dark background for footer */
+            border-top: 1px solid #333; /* Separator line */
+        }
+
+        .input-container {
+            display: flex;
+            align-items: center;
+            background-color: #333; /* Darker background for input container */
+            border-radius: 25px;
+            padding: 5px 15px;
+        }
+
+        .input-container input {
+            flex-grow: 1; /* Takes up most of the space */
+            border: none;
+            outline: none;
+            background: none;
+            color: #ffffff;
+            padding: 10px 0;
+            font-size: 1em;
+        }
+
+        .input-container input::placeholder {
+            color: #aaaaaa; /* Grey placeholder text */
+        }
+
+        .microphone-icon {
+            margin-left: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-content-area">
+        <header class="app-header">
+            <div class="logo">Habari</div>
+            <div class="header-info">
+                <span class="count">6/75</span>
+                <div class="status-dot"></div>
+            </div>
+        </header>
+
+        <main class="central-display" id="chat-window">
+            <div class="message" id="initial-message">
+                Select a chat or create a new one.
+            </div>
+        </main>
+
+        <footer class="input-footer">
+            <div class="input-container">
+                <input type="text" id="user-input" placeholder="Ask me something">
+                <div class="microphone-icon">🎤</div> <!-- Placeholder for icon -->
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        const chatWindow = document.getElementById('chat-window');
+        const userInput = document.getElementById('user-input');
+        const initialMessage = document.getElementById('initial-message');
+
+        userInput.addEventListener('keydown', async (event) => {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+
+                const message = userInput.value.trim();
+                if (message === '') return;
+
+                // Remove initial message if it exists
+                if (initialMessage) {
+                    initialMessage.remove();
+                }
+
+                // Display user message
+                const userMessageDiv = document.createElement('div');
+                userMessageDiv.classList.add('message'); // Reuse the message class for basic styling
+                userMessageDiv.textContent = `You: ${message}`;
+                userMessageDiv.style.textAlign = 'right'; // Example styling for user messages
+                chatWindow.appendChild(userMessageDiv);
+
+                userInput.value = ''; // Clear input
+                chatWindow.scrollTop = chatWindow.scrollHeight; // Scroll to bottom
+
+                // Send message to backend
+                try {
+                    const response = await fetch('/chat', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ user_input: message })
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+
+                    const botResponse = await response.text();
+
+                    // Display bot message
+                    const botMessageDiv = document.createElement('div');
+                    botMessageDiv.classList.add('message'); // Reuse the message class
+                    botMessageDiv.textContent = `Bot: ${botResponse}`;
+                    botMessageDiv.style.textAlign = 'left'; // Example styling for bot messages
+                    chatWindow.appendChild(botMessageDiv);
+
+                    chatWindow.scrollTop = chatWindow.scrollHeight; // Scroll to bottom
+
+                } catch (error) {
+                    console.error('Error sending message:', error);
+                    const errorMessageDiv = document.createElement('div');
+                    errorMessageDiv.classList.add('message');
+                    errorMessageDiv.textContent = 'Error: Could not get response from bot.';
+                    errorMessageDiv.style.color = 'red';
+                    chatWindow.appendChild(errorMessageDiv);
+                    chatWindow.scrollTop = chatWindow.scrollHeight;
+                }
+            }
+        });
+    </script>
+</body>
+</html> 
