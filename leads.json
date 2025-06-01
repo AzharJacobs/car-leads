@@ -1,0 +1,67 @@
+[
+    {
+      "name": "John Smith",
+      "phone": "+1234567890",
+      "car_interest": "Toyota Corolla",
+      "budget": "$15,000",
+      "lead_source": "Phone Call",
+      "timestamp": "2025-05-30T10:15:00"
+    },
+    {
+      "name": "Aisha Patel",
+      "phone": "+9876543210",
+      "car_interest": "BMW X3",
+      "budget": "$30,000",
+      "lead_source": "Phone Call",
+      "timestamp": "2025-05-30T11:00:00"
+    },
+    {
+      "name": "Carlos Mendes",
+      "phone": "+1987321546",
+      "car_interest": "Honda Civic",
+      "budget": "$18,000",
+      "lead_source": "Web Form",
+      "timestamp": "2025-05-30T12:20:00"
+    },
+    {
+      "name": "Emily Zhang",
+      "phone": "+1444555666",
+      "car_interest": "Tesla Model 3",
+      "budget": "$40,000",
+      "lead_source": "Social Media",
+      "timestamp": "2025-05-30T13:45:00"
+    },
+    {
+      "name": "David Brown",
+      "phone": "+1333777888",
+      "car_interest": "Ford F-150",
+      "budget": "$35,000",
+      "lead_source": "Walk-in",
+      "timestamp": "2025-05-30T14:10:00"
+    },
+    {
+      "name": "Zanele Mokoena",
+      "phone": "+27654321987",
+      "car_interest": "Hyundai Tucson",
+      "budget": "$22,000",
+      "lead_source": "Email",
+      "timestamp": "2025-05-30T15:05:00"
+    },
+    {
+      "name": "Michael Osei",
+      "phone": "+2348123456789",
+      "car_interest": "Nissan Altima",
+      "budget": "$20,000",
+      "lead_source": "Phone Call",
+      "timestamp": "2025-05-30T16:30:00"
+    },
+    {
+      "name": "Lara van Dyk",
+      "phone": "+27821234567",
+      "car_interest": "Volkswagen Polo",
+      "budget": "$17,500",
+      "lead_source": "Web Form",
+      "timestamp": "2025-05-30T17:00:00"
+    }
+  ]
+  
