@@ -6,11 +6,20 @@ from openai import OpenAI
 # Initialize OpenAI client with API key from environment
 client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
-# System prompt defines CarGPT's role and behavior
+# Updated system prompt with better formatting instructions
 system_prompt = """
 You are CarGPT, a professional AI assistant built specifically for automotive businesses. Your job is to help staff access daily operational information such as customer call leads, appointment bookings, test drive schedules, sales inquiries, and other internal business data.
 
 You are contextually aware and can understand when users are asking about leads in general or specific types. When someone asks "how many leads came in today" or "show me today's leads", provide ALL leads unless they specifically ask for a particular type.
+
+FORMATTING GUIDELINES:
+- Use clear section headers with proper spacing
+- Use consistent bullet points (either • or -) throughout
+- Add blank lines between sections for readability
+- Use numbers for ordered lists when appropriate
+- Keep text aligned and well-structured
+- Use simple, clean formatting without mixing styles
+- Add summary totals at the top when showing breakdowns
 
 Key behaviors:
 - When asked for "leads" without specification, show ALL leads
@@ -20,7 +29,7 @@ Key behaviors:
 - If data is not available, explain what data you do have access to
 - Only ask for clarification when the request is genuinely ambiguous
 
-Your tone is professional, helpful, and efficient. Always provide actionable information.
+Your tone is professional, helpful, and efficient. Always provide actionable information with clean, readable formatting.
 """
 
 def load_leads_data(filepath="leads.json"):
@@ -80,13 +89,9 @@ def get_leads_by_car_interest(brand):
         if brand_lower in lead.get("car_interest", "").lower()
     ]
 
-def get_leads_summary():
+def format_leads_summary():
     """
-    Returns an aggregated summary of leads:
-    - Total leads count
-    - Today's leads count
-    - Breakdown by lead source
-    - Breakdown by car brand
+    Returns a well-formatted summary of leads with improved layout.
     """
     total = len(leads_data)
     today_leads = get_today_leads()
@@ -105,13 +110,119 @@ def get_leads_summary():
             brand = car_interest.split()[0]
             brand_counts[brand] = brand_counts.get(brand, 0) + 1
 
-    return {
-        "total_leads": total,
-        "today_leads": len(today_leads),
-        "source_breakdown": source_counts,
-        "brand_breakdown": brand_counts,
-        "today_leads_data": today_leads,
-    }
+    # Create formatted response
+    formatted_response = f"""
+LEADS OVERVIEW
+==============
+Total Leads: {total}
+Today's Leads: {len(today_leads)}
+
+LEAD SOURCES
+------------"""
+    
+    for source, count in sorted(source_counts.items()):
+        formatted_response += f"\n• {source}: {count}"
+    
+    formatted_response += f"""
+
+CAR BRANDS
+----------"""
+    
+    for brand, count in sorted(brand_counts.items()):
+        formatted_response += f"\n• {brand}: {count}"
+    
+    # Add today's leads details if any exist
+    if today_leads:
+        formatted_response += f"""
+
+TODAY'S LEAD DETAILS
+-------------------"""
+        for i, lead in enumerate(today_leads, 1):
+            formatted_response += f"""
+
+{i}. {lead.get('name', 'Unknown')}
+   Source: {lead.get('lead_source', 'Unknown')}
+   Interest: {lead.get('car_interest', 'Not specified')}
+   Budget: {lead.get('budget', 'Not specified')}
+   Contact: {lead.get('phone', 'N/A')} | {lead.get('email', 'N/A')}"""
+            if lead.get('test_drive_date'):
+                formatted_response += f"\n   Test Drive: {lead.get('test_drive_date')}"
+    
+    return formatted_response
+
+def format_today_leads():
+    """Format today's leads with improved layout."""
+    today_leads = get_today_leads()
+    
+    if not today_leads:
+        return "\nTODAY'S LEADS\n=============\nNo leads found for today."
+    
+    formatted_response = f"""
+TODAY'S LEADS ({len(today_leads)})
+{'=' * (15 + len(str(len(today_leads))))}"""
+    
+    for i, lead in enumerate(today_leads, 1):
+        formatted_response += f"""
+
+{i}. {lead.get('name', 'Unknown')}
+   Source: {lead.get('lead_source', 'Unknown')}
+   Interest: {lead.get('car_interest', 'Not specified')}
+   Budget: {lead.get('budget', 'Not specified')}
+   Phone: {lead.get('phone', 'N/A')}
+   Email: {lead.get('email', 'N/A')}"""
+        if lead.get('test_drive_date'):
+            formatted_response += f"\n   Test Drive: {lead.get('test_drive_date')}"
+    
+    return formatted_response
+
+def format_leads_by_source(source_name):
+    """Format leads by source with improved layout."""
+    source_leads = get_leads_by_source(source_name)
+    
+    if not source_leads:
+        return f"\n{source_name.upper()} LEADS\n{'=' * (len(source_name) + 6)}\nNo {source_name} leads found."
+    
+    formatted_response = f"""
+{source_name.upper()} LEADS ({len(source_leads)})
+{'=' * (len(source_name) + 8 + len(str(len(source_leads))))}"""
+    
+    for i, lead in enumerate(source_leads, 1):
+        formatted_response += f"""
+
+{i}. {lead.get('name', 'Unknown')}
+   Interest: {lead.get('car_interest', 'Not specified')}
+   Budget: {lead.get('budget', 'Not specified')}
+   Phone: {lead.get('phone', 'N/A')}
+   Email: {lead.get('email', 'N/A')}"""
+        if lead.get('test_drive_date'):
+            formatted_response += f"\n   Test Drive: {lead.get('test_drive_date')}"
+    
+    return formatted_response
+
+def format_leads_by_brand(brand):
+    """Format leads by car brand with improved layout."""
+    brand_leads = get_leads_by_car_interest(brand)
+    
+    if not brand_leads:
+        return f"\n{brand.upper()} LEADS\n{'=' * (len(brand) + 6)}\nNo {brand} leads found."
+    
+    formatted_response = f"""
+{brand.upper()} LEADS ({len(brand_leads)})
+{'=' * (len(brand) + 8 + len(str(len(brand_leads))))}"""
+    
+    for i, lead in enumerate(brand_leads, 1):
+        formatted_response += f"""
+
+{i}. {lead.get('name', 'Unknown')}
+   Source: {lead.get('lead_source', 'Unknown')}
+   Car Model: {lead.get('car_interest', 'Not specified')}
+   Budget: {lead.get('budget', 'Not specified')}
+   Phone: {lead.get('phone', 'N/A')}
+   Email: {lead.get('email', 'N/A')}"""
+        if lead.get('test_drive_date'):
+            formatted_response += f"\n   Test Drive: {lead.get('test_drive_date')}"
+    
+    return formatted_response
 
 def analyze_user_intent(user_input):
     """
@@ -176,40 +287,12 @@ def prepare_context_data(user_input):
 
     # If filter for today's leads
     if conversation_context["date_filter"] == "today" or "today" in user_input.lower():
-        today_leads = get_today_leads()
-        if today_leads:
-            context_info += f"\n\n📊 TODAY'S LEADS ({len(today_leads)}):\n"
-            for i, lead in enumerate(today_leads, 1):
-                context_info += (
-                    f"\n{i}. {lead.get('name', 'Unknown')} - {lead.get('lead_source', 'Unknown')}\n"
-                    f"   • Interested in: {lead.get('car_interest', 'Not specified')}\n"
-                    f"   • Budget: {lead.get('budget', 'Not specified')}\n"
-                    f"   • Phone: {lead.get('phone', 'N/A')}\n"
-                    f"   • Email: {lead.get('email', 'N/A')}"
-                )
-                if lead.get('test_drive_date'):
-                    context_info += f"\n   • Test Drive Date: {lead.get('test_drive_date')}"
-        else:
-            context_info += "\n\n📊 No leads found for today."
+        context_info = format_today_leads()
 
     # Filter for specific car brand leads
     elif conversation_context["lead_type_focus"] and conversation_context["lead_type_focus"].startswith("car_"):
         brand = conversation_context["lead_type_focus"].replace("car_", "")
-        brand_leads = get_leads_by_car_interest(brand)
-        if brand_leads:
-            context_info += f"\n\n📊 {brand.upper()} LEADS ({len(brand_leads)}):\n"
-            for i, lead in enumerate(brand_leads, 1):
-                context_info += (
-                    f"\n{i}. {lead.get('name', 'Unknown')} - {lead.get('lead_source', 'Unknown')}\n"
-                    f"   • Car: {lead.get('car_interest', 'Not specified')}\n"
-                    f"   • Budget: {lead.get('budget', 'Not specified')}\n"
-                    f"   • Phone: {lead.get('phone', 'N/A')}\n"
-                    f"   • Email: {lead.get('email', 'N/A')}"
-                )
-                if lead.get('test_drive_date'):
-                    context_info += f"\n   • Test Drive Date: {lead.get('test_drive_date')}"
-        else:
-            context_info += f"\n\n📊 No {brand.upper()} leads found."
+        context_info = format_leads_by_brand(brand)
 
     # Filter for lead source
     elif conversation_context["lead_type_focus"] and not conversation_context["lead_type_focus"].startswith("car_"):
@@ -222,46 +305,11 @@ def prepare_context_data(user_input):
             "social_media": "Social Media"
         }
         source = source_map.get(conversation_context["lead_type_focus"], conversation_context["lead_type_focus"])
-        source_leads = get_leads_by_source(source)
-        if source_leads:
-            context_info += f"\n\n📊 {source.upper()} LEADS ({len(source_leads)}):\n"
-            for i, lead in enumerate(source_leads, 1):
-                context_info += (
-                    f"\n{i}. {lead.get('name', 'Unknown')}\n"
-                    f"   • Car: {lead.get('car_interest', 'Not specified')}\n"
-                    f"   • Budget: {lead.get('budget', 'Not specified')}\n"
-                    f"   • Phone: {lead.get('phone', 'N/A')}\n"
-                    f"   • Email: {lead.get('email', 'N/A')}"
-                )
-                if lead.get('test_drive_date'):
-                    context_info += f"\n   • Test Drive Date: {lead.get('test_drive_date')}"
-        else:
-            context_info += f"\n\n📊 No {source} leads found."
+        context_info = format_leads_by_source(source)
 
     # General leads summary
     elif conversation_context["current_topic"] == "all_leads":
-        summary = get_leads_summary()
-        context_info += (
-            f"\n\n📊 LEADS SUMMARY:\n"
-            f"• Total leads: {summary['total_leads']}\n"
-            f"• Today's leads: {summary['today_leads']}\n\n"
-            "Breakdown by lead source:\n"
-        )
-        for source, count in summary['source_breakdown'].items():
-            context_info += f"• {source}: {count}\n"
-
-        context_info += "\nBreakdown by car brand:\n"
-        for brand, count in summary['brand_breakdown'].items():
-            context_info += f"• {brand}: {count}\n"
-
-        if summary['today_leads_data']:
-            context_info += "\n📝 Details of Today's Leads:\n"
-            for i, lead in enumerate(summary['today_leads_data'], 1):
-                context_info += (
-                    f"\n{i}. {lead.get('name', 'Unknown')} ({lead.get('lead_source', 'Unknown')})\n"
-                    f"   • Car: {lead.get('car_interest', 'Not specified')}\n"
-                    f"   • Budget: {lead.get('budget', 'Not specified')}"
-                )
+        context_info = format_leads_summary()
 
     return context_info
 
@@ -269,7 +317,6 @@ def generate_response(user_input):
     """
     Generate AI response based on user input combined with contextual leads data.
     """
-
     # Prepare enriched prompt with leads data context
     enriched_user_input = user_input + prepare_context_data(user_input)
 
@@ -282,7 +329,7 @@ def generate_response(user_input):
         model="gpt-4o-mini",
         messages=messages,
         temperature=0.3,
-        max_tokens=600,
+        max_tokens=800,  # Increased for better formatted responses
         top_p=1,
         frequency_penalty=0,
         presence_penalty=0,
