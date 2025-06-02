@@ -12,32 +12,66 @@ chatForm.addEventListener("submit", function (e) {
 // Optionally keep this if you want button click support
 sendBtn.addEventListener("click", sendMessage);
 
-function sendMessage() {
+async function sendMessage() {
   const text = userInput.value.trim();
   if (!text) return;
 
   addMessage(text, "user");
+  userInput.value = ""; // Clear input immediately
 
-  setTimeout(() => {
-    const botResponse = generateFakeBotReply(text);
-    addMessage(botResponse, "bot");
-  }, 600);
+  // Add a loading indicator while waiting for the bot's response (Optional)
+  const loadingMessage = addMessage("Typing...", "bot-loading"); // Use a valid class name
 
-  userInput.value = "";
+  try {
+    const response = await fetch('/chat', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ message: text })
+    });
+
+    // Remove the loading indicator
+    loadingMessage.remove();
+
+    if (!response.ok) {
+      // Handle HTTP errors
+      const errorData = await response.json();
+      throw new Error(`HTTP error! status: ${response.status}, Details: ${errorData.error || response.statusText}`);
+    }
+
+    const data = await response.json();
+    addMessage(data.reply, "bot");
+
+  } catch (error) {
+    // Remove the loading indicator if it still exists
+     if(loadingMessage && loadingMessage.parentNode) {
+         loadingMessage.remove();
+     }
+    console.error('Error sending message:', error);
+    addMessage("Error: Could not get response from the bot.", "bot error"); // Display an error message
+  }
+
+  chatBox.scrollTop = chatBox.scrollHeight;
 }
 
 function addMessage(message, sender) {
   const msgDiv = document.createElement("div");
-  msgDiv.classList.add("message", sender);
+  // Split sender string by space to add multiple classes if needed, though for 'bot-loading' it's a single class
+  const classes = sender.split(' ');
+  msgDiv.classList.add("message", ...classes); // Use spread operator to add all classes
+  // Handle potential HTML in message if needed, for now using innerText for safety
   msgDiv.innerText = message;
   chatBox.appendChild(msgDiv);
-  chatBox.scrollTop = chatBox.scrollHeight;
+  // Autoscroll handled in sendMessage after receiving response
+  return msgDiv; // Return the message element in case it's a loading message to be removed later
 }
 
-function generateFakeBotReply(text) {
-  if (text.toLowerCase().includes("lead")) {
-    return "You currently have 5 leads. Would you like to filter by date or car model?";
-  } else {
-    return "Thanks for your question. I’ll get that information for you.";
-  }
-}
+// Remove the fake bot reply function as we will now use the backend
+// function generateFakeBotReply(text) {
+//   if (text.toLowerCase().includes("lead")) {
+//     return "You currently have 5 leads. Would you like to filter by date or car model?";
+//   } else {
+//     return "Thanks for your question. I'll get that information for you.";
+//   }
+// }
