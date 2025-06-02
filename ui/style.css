@@ -10,6 +10,16 @@ body {
   padding: 20px;
   min-height: 100vh;
   box-sizing: border-box;
+  position: relative;
+}
+
+.logo {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 50px;
+  height: auto;
+  z-index: 1000;
 }
 
 /* Container */
@@ -21,6 +31,7 @@ body {
   flex-direction: column;
   justify-content: space-between;
   height: 100%;
+  margin-top: 70px;
 }
 
 /* Heading */
@@ -32,15 +43,11 @@ h1 {
 
 /* Chat Box */
 .chat-box {
-  background-color: #1e1e1e;
-  border-radius: 10px;
-  padding: 15px;
   flex: 1;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 10px;
-  box-shadow: 0 0 10px #00000044;
 }
 
 /* Chat Input Area */
