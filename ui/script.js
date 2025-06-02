@@ -1,20 +1,23 @@
 const sendBtn = document.getElementById("sendBtn");
 const userInput = document.getElementById("userInput");
 const chatBox = document.getElementById("chatBox");
+const chatForm = document.getElementById("chatForm");
 
-sendBtn.addEventListener("click", sendMessage);
-userInput.addEventListener("keydown", function (e) {
-  if (e.key === "Enter") sendMessage();
+// Prevent default form submit (page reload)
+chatForm.addEventListener("submit", function (e) {
+  e.preventDefault();
+  sendMessage();
 });
+
+// Optionally keep this if you want button click support
+sendBtn.addEventListener("click", sendMessage);
 
 function sendMessage() {
   const text = userInput.value.trim();
   if (!text) return;
 
-  // Add user message
   addMessage(text, "user");
 
-  // Fake bot response (for now)
   setTimeout(() => {
     const botResponse = generateFakeBotReply(text);
     addMessage(botResponse, "bot");
@@ -32,7 +35,6 @@ function addMessage(message, sender) {
 }
 
 function generateFakeBotReply(text) {
-  // This is just placeholder logic
   if (text.toLowerCase().includes("lead")) {
     return "You currently have 5 leads. Would you like to filter by date or car model?";
   } else {

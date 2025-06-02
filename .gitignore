@@ -1,0 +1,41 @@
+# Ignore Python bytecode
+__pycache__/
+*.pyc
+
+# Ignore environment variables and sensitive files
+.env
+*.env
+config.ini
+
+# Ignore API keys and credentials
+*.key
+*.pem
+*.cer
+*.p12
+*.pfx
+
+# Ignore editor and IDE specific files
+.vscode/
+.idea/
+
+# Ignore logs and databases
+*.log
+*.db
+
+# Ignore uploaded files and media
+uploads/
+media/
+
+# Ignore build artifacts
+build/
+dist/
+
+# Ignore packaging files
+*.egg-info/
+.eggs/
+
+# Ignore virtual environments
+voyage/
+venv/
+ENV/
+env/ 
