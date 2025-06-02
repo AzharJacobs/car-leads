@@ -9,16 +9,24 @@
 <body>
   <div class="container">
     <h1>What can I help with?</h1>
-    
-    <div class="chat-box" id="chatBox">
-      <!-- Messages will appear here -->
+
+    <div class="chat-box" id="chatBox" aria-live="polite">
+      <!-- Chat messages will be injected here -->
     </div>
-  
-    <div class="chat-input">
-      <input type="text" placeholder="Ask anything" id="userInput" />
-      <button id="sendBtn">🎤</button>
-    </div>
+
+    <form class="chat-input" id="chatForm">
+      <input 
+        type="text" 
+        placeholder="Ask anything..." 
+        id="userInput" 
+        aria-label="Chat input"
+        autocomplete="off"
+        required
+      />
+      <button type="submit" id="sendBtn" aria-label="Send message">🎤</button>
+    </form>
   </div>
+
   <script src="script.js"></script>
 </body>
 </html>
