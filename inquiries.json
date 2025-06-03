@@ -1,0 +1,57 @@
+[
+    {
+      "name": "Nomvula Sithole",
+      "phone": "+27780123456",
+      "email": "nomvula.sithole@example.com",
+      "car_interest": "Nissan Qashqai",
+      "inquiry": "Is this car still available?",
+      "lead_source": "Email",
+      "timestamp": "2025-06-02T17:45:00"
+    },
+    {
+      "name": "Brian Mthembu",
+      "phone": "+27781234567",
+      "email": "brian.mthembu@example.com",
+      "car_interest": "Toyota Hilux",
+      "inquiry": "Do you offer in-house financing?",
+      "lead_source": "Phone In",
+      "timestamp": "2025-06-03T09:15:00"
+    },
+    {
+      "name": "Kea Lebese",
+      "phone": "+27782345678",
+      "email": "kea.lebese@example.com",
+      "car_interest": "Audi A3",
+      "inquiry": "Can I trade in my current car?",
+      "lead_source": "Email",
+      "timestamp": "2025-06-02T15:30:00"
+    },
+    {
+      "name": "Lwazi Zungu",
+      "phone": "+27783456789",
+      "email": "lwazi.zungu@example.com",
+      "car_interest": "Mercedes-Benz GLA",
+      "inquiry": "Who do I speak to about warranty?",
+      "lead_source": "Phone In",
+      "timestamp": "2025-06-03T11:00:00"
+    },
+    {
+      "name": "Ayanda Maseko",
+      "phone": "+27784567890",
+      "email": "ayanda.maseko@example.com",
+      "car_interest": "BMW X1",
+      "inquiry": "Is this car still available?",
+      "lead_source": "Email",
+      "timestamp": "2025-06-03T08:20:00"
+    },
+    {
+      "name": "Thuli Madonsela",
+      "phone": "+27785678901",
+      "email": "thuli.madonsela@example.com",
+      "car_interest": "Honda Civic",
+      "inquiry": "Can I trade in my current car?",
+      "lead_source": "Phone In",
+      "timestamp": "2025-06-02T18:05:00"
+    }
+  ]
+  
