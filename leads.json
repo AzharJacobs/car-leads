@@ -118,5 +118,65 @@
     "lead_source": "Test Drive",
     "timestamp": "2025-05-30T18:30:00",
     "test_drive_date": "2025-06-03T09:15:00"
+  },
+  {
+    "name": "Sipho Dlamini",
+    "phone": "+27712345678",
+    "email": "sipho.dlamini@example.com",
+    "car_interest": "Toyota Fortuner",
+    "budget": "$45,000",
+    "lead_source": "Test Drive",
+    "timestamp": "2025-06-03T09:00:00",
+    "test_drive_date": "2025-06-03T09:15:00"
+  },
+  {
+    "name": "Thando Mokoena",
+    "phone": "+27723456789",
+    "email": "thando.mokoena@example.com",
+    "car_interest": "VW Golf GTI",
+    "budget": "$40,000",
+    "lead_source": "Test Drive",
+    "timestamp": "2025-06-03T10:15:00",
+    "test_drive_date": "2025-06-03T11:00:00"
+  },
+  {
+    "name": "Anele Khumalo",
+    "phone": "+27734567890",
+    "email": "anele.khumalo@example.com",
+    "car_interest": "Hyundai Tucson",
+    "budget": "$35,000",
+    "lead_source": "Email",
+    "timestamp": "2025-06-03T08:30:00",
+    "test_drive_date": null
+  },
+  {
+    "name": "Zinhle Mbatha",
+    "phone": "+27745678901",
+    "email": "zinhle.mbatha@example.com",
+    "car_interest": "Ford Ranger",
+    "budget": "$50,000",
+    "lead_source": "Email",
+    "timestamp": "2025-06-03T12:00:00",
+    "test_drive_date": null
+  },
+  {
+    "name": "Lerato Molefe",
+    "phone": "+27756789012",
+    "email": "lerato.molefe@example.com",
+    "car_interest": "Mazda CX-5",
+    "budget": "$38,000",
+    "lead_source": "Phone In",
+    "timestamp": "2025-06-03T09:45:00",
+    "test_drive_date": null
+  },
+  {
+    "name": "Tshepo Ndlovu",
+    "phone": "+27767890123",
+    "email": "tshepo.ndlovu@example.com",
+    "car_interest": "Kia Sportage",
+    "budget": "$36,000",
+    "lead_source": "Phone In",
+    "timestamp": "2025-06-03T14:20:00",
+    "test_drive_date": null
   }
 ]
